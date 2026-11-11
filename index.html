@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080d18">
+  <title>DIU NEXUS — Student Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="#" aria-label="DIU Nexus home">
+      <span class="brand-mark">N<span>×</span></span>
+      <span><b>DIU NEXUS</b><small>STUDENT COMMAND CENTER</small></span>
+    </a>
+    <div class="side-label">WORKSPACE</div>
+    <nav class="nav">
+      <button class="nav-link active" data-view="overview"><span>◈</span> Overview</button>
+      <button class="nav-link" data-view="courses"><span>▤</span> My Courses</button>
+      <button class="nav-link" data-view="attendance"><span>◷</span> Attendance</button>
+      <button class="nav-link" data-view="routine"><span>▦</span> Class Routine</button>
+      <button class="nav-link" data-view="assignments"><span>☷</span> Assignments <i id="taskBadge">0</i></button>
+      <button class="nav-link" data-view="notes"><span>▧</span> Quick Notes</button>
+      <button class="nav-link" data-view="focus"><span>◉</span> Focus Room</button>
+      <button class="nav-link" data-view="analytics"><span>⌁</span> Analytics</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="mini-status"><span class="pulse"></span><span>LOCAL STORAGE ACTIVE</span></div>
+      <button class="nav-link" data-view="settings"><span>⚙</span> Settings</button>
+      <div class="profile-mini"><div class="avatar">S</div><div><b id="sideName">DIU Student</b><small id="sideDept">CSE · Batch 70</small></div><span class="online-dot"></span></div>
+    </div>
+  </aside>
+
+  <main class="main-area">
+    <header class="topbar">
+      <button class="mobile-menu" id="menuBtn" aria-label="Toggle menu">☰</button>
+      <div class="crumb"><span>DIU /</span> <b id="pageName">Overview</b></div>
+      <div class="top-actions">
+        <div class="date-chip" id="todayDate"></div>
+        <button class="icon-btn" id="quickAddBtn" title="Quick add">＋</button>
+        <button class="avatar top-avatar" id="profileShortcut" title="Settings">S</button>
+      </div>
+    </header>
+
+    <div class="content">
+      <section class="view active" id="view-overview">
+        <div class="welcome-row">
+          <div><div class="eyebrow"><span class="pulse"></span> YOUR ACADEMIC SPACE</div><h1>Good day, <span class="gradient-text" id="welcomeName">Student</span> <span class="wave">✦</span></h1><p class="muted">One place for your classes, goals and progress.</p></div>
+          <button class="primary-btn" data-open="courseModal">＋ Add course</button>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>Current CGPA</span><span class="stat-icon cyan">✧</span></div><div class="stat-value" id="statCgpa">0.00</div><div class="stat-foot"><span class="cyan-text">Academic score</span><span>out of 4.00</span></div><div class="sparkline"><i style="height:32%"></i><i style="height:46%"></i><i style="height:40%"></i><i style="height:65%"></i><i style="height:55%"></i><i style="height:82%"></i><i style="height:100%"></i></div></article>
+          <article class="stat-card"><div class="stat-top"><span>Attendance</span><span class="stat-icon purple">◷</span></div><div class="stat-value" id="statAttendance">0<span class="unit">%</span></div><div class="progress-track"><i id="attendanceBar"></i></div><div class="stat-foot"><span id="attendanceHint">No classes tracked</span><span>target 75%</span></div></article>
+          <article class="stat-card"><div class="stat-top"><span>Active courses</span><span class="stat-icon pink">▤</span></div><div class="stat-value" id="statCourses">0</div><div class="stat-foot"><span class="pink-text">This semester</span><span id="creditHint">0 credits</span></div><div class="tiny-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
+          <article class="stat-card"><div class="stat-top"><span>Pending tasks</span><span class="stat-icon orange">☷</span></div><div class="stat-value" id="statTasks">0</div><div class="stat-foot"><span class="orange-text">Keep moving</span><span id="taskHint">No deadlines yet</span></div><div class="task-dots"><i></i><i></i><i></i><i></i><i></i></div></article>
+        </div>
+        <div class="dashboard-grid">
+          <article class="panel wide-panel">
+            <div class="panel-heading"><div><div class="eyebrow">YOUR SEMESTER</div><h2>Academic snapshot</h2></div><button class="text-btn" data-view="analytics">View analytics ↗</button></div>
+            <div class="snapshot" id="snapshot"><div class="empty-state">Add your courses and grades to see your academic snapshot.</div></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><div class="eyebrow">UP NEXT</div><h2>Upcoming deadlines</h2></div><button class="text-btn" data-view="assignments">All tasks ↗</button></div>
+            <div id="upcomingList" class="compact-list"><div class="empty-state">No deadlines. Enjoy the calm.</div></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><div class="eyebrow">STUDY RHYTHM</div><h2>Focus session</h2></div><span class="live-pill">READY</span></div>
+            <div class="focus-preview"><div class="focus-ring"><span>25:00</span><small>MINUTES</small></div><div><b>Deep work mode</b><p class="muted">One task. One session. No distractions.</p><button class="primary-btn small" data-view="focus">Open focus room →</button></div></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><div class="eyebrow">QUICK ACCESS</div><h2>Student tools</h2></div></div>
+            <div class="quick-grid"><button data-view="courses"><span>▤</span>Courses</button><button data-view="attendance"><span>◷</span>Attendance</button><button data-view="routine"><span>▦</span>Routine</button><button data-view="notes"><span>▧</span>Notes</button></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-courses">
+        <div class="page-heading"><div><div class="eyebrow">SEMESTER MANAGEMENT</div><h1>My Courses</h1><p class="muted">Keep your course list, credits and grades in one place.</p></div><button class="primary-btn" data-open="courseModal">＋ Add course</button></div>
+        <div class="toolbar"><input id="courseSearch" class="search-input" placeholder="Search course code or title…"><span class="muted" id="courseCount">0 courses</span></div>
+        <div class="table-wrap"><table><thead><tr><th>COURSE</th><th>CREDITS</th><th>GRADE</th><th>GRADE POINT</th><th></th></tr></thead><tbody id="courseTable"></tbody></table></div>
+      </section>
+
+      <section class="view" id="view-attendance">
+        <div class="page-heading"><div><div class="eyebrow">BE PRESENT</div><h1>Attendance tracker</h1><p class="muted">Track attended and missed classes for each course.</p></div></div>
+        <div class="notice">◈ Keep your attendance at or above <b>75%</b> to stay on track. This is a personal tracker, not an official DIU record.</div>
+        <div class="attendance-list" id="attendanceList"></div>
+      </section>
+
+      <section class="view" id="view-routine">
+        <div class="page-heading"><div><div class="eyebrow">YOUR WEEK AT A GLANCE</div><h1>Class routine</h1><p class="muted">Add your classes and organize your week.</p></div><button class="primary-btn" data-open="routineModal">＋ Add class</button></div>
+        <div class="routine-grid" id="routineGrid"></div>
+      </section>
+
+      <section class="view" id="view-assignments">
+        <div class="page-heading"><div><div class="eyebrow">STAY AHEAD</div><h1>Assignments & tasks</h1><p class="muted">Small steps, submitted on time.</p></div><button class="primary-btn" data-open="taskModal">＋ Add task</button></div>
+        <div class="task-filters"><button class="filter active" data-filter="all">All</button><button class="filter" data-filter="pending">Pending</button><button class="filter" data-filter="done">Completed</button></div>
+        <div class="task-list" id="taskList"></div>
+      </section>
+
+      <section class="view" id="view-notes">
+        <div class="page-heading"><div><div class="eyebrow">THINK. WRITE. REMEMBER.</div><h1>Quick notes</h1><p class="muted">A little space for ideas, reminders and class notes.</p></div><button class="primary-btn" id="newNoteBtn">＋ New note</button></div>
+        <div class="notes-grid" id="notesGrid"></div>
+      </section>
+
+      <section class="view" id="view-focus">
+        <div class="page-heading"><div><div class="eyebrow">PROTECT YOUR ATTENTION</div><h1>Focus room</h1><p class="muted">Use focused intervals to make study time count.</p></div></div>
+        <div class="focus-room panel"><div class="eyebrow">POMODORO TIMER</div><div class="timer-mode"><button class="mode active" data-min="25">Focus · 25m</button><button class="mode" data-min="5">Short break · 5m</button><button class="mode" data-min="15">Long break · 15m</button></div><div class="big-timer" id="bigTimer">25:00</div><div class="timer-progress"><i id="timerProgress"></i></div><div class="timer-controls"><button class="primary-btn" id="timerStart">Start focus</button><button class="secondary-btn" id="timerReset">Reset</button></div><p class="muted" id="timerMessage">Ready when you are. Put your phone away and begin.</p></div>
+      </section>
+
+      <section class="view" id="view-analytics">
+        <div class="page-heading"><div><div class="eyebrow">MEASURE YOUR MOMENTUM</div><h1>Analytics</h1><p class="muted">A live summary based on the information you enter.</p></div></div>
+        <div class="stats-grid analytics-stats"><article class="stat-card"><div class="stat-top"><span>Weighted CGPA</span><span class="stat-icon cyan">✧</span></div><div class="stat-value" id="analyticsCgpa">0.00</div><div class="stat-foot">Based on courses with grades</div></article><article class="stat-card"><div class="stat-top"><span>Credits entered</span><span class="stat-icon purple">▤</span></div><div class="stat-value" id="analyticsCredits">0</div><div class="stat-foot">Total course credits</div></article><article class="stat-card"><div class="stat-top"><span>Tasks completed</span><span class="stat-icon pink">✓</span></div><div class="stat-value" id="analyticsDone">0%</div><div class="stat-foot">Completion rate</div></article><article class="stat-card"><div class="stat-top"><span>Focus sessions</span><span class="stat-icon orange">◉</span></div><div class="stat-value" id="analyticsFocus">0</div><div class="stat-foot">Completed sessions on this device</div></article></div>
+        <div class="panel"><div class="panel-heading"><div><div class="eyebrow">COURSE PERFORMANCE</div><h2>Grade overview</h2></div></div><div id="gradeChart" class="grade-chart"></div></div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="page-heading"><div><div class="eyebrow">MAKE IT YOURS</div><h1>Settings</h1><p class="muted">Personalize your student command center.</p></div></div>
+        <div class="settings-grid">
+          <div class="panel settings-panel"><h2>Student profile</h2><label>Display name<input id="settingName" placeholder="Your name"></label><label>Department<input id="settingDept" placeholder="e.g. CSE"></label><label>Batch / section<input id="settingBatch" placeholder="e.g. 70 / P"></label><button class="primary-btn" id="saveProfile">Save profile</button></div>
+          <div class="panel settings-panel"><h2>Data management</h2><p class="muted">Your dashboard data is stored in this browser using localStorage. Export a backup before clearing browser data.</p><div class="settings-actions"><button class="secondary-btn" id="exportData">↓ Export backup</button><label class="secondary-btn file-label">↑ Import backup<input type="file" id="importData" accept="application/json"></label><button class="danger-btn" id="clearData">Reset all data</button></div><p class="tiny-muted">This is an independent student productivity tool, not an official DIU portal. Do not store passwords or sensitive personal information here.</p></div>
+        </div>
+      </section>
+    </div>
+    <footer>DIU NEXUS <span>·</span> Built for your academic journey <span class="footer-right">LOCAL-FIRST STUDENT TOOL</span></footer>
+  </main>
+</div>
+
+<!-- Modals -->
+<div class="modal-backdrop" id="courseModal"><form class="modal" id="courseForm"><div class="modal-head"><div><div class="eyebrow">COURSE DETAILS</div><h2 id="courseModalTitle">Add course</h2></div><button type="button" class="close-btn" data-close>×</button></div><input type="hidden" id="courseId"><label>Course code<input id="courseCode" required placeholder="e.g. CSE113"></label><label>Course title<input id="courseTitle" required placeholder="e.g. Programming and Problem Solving"></label><div class="form-row"><label>Credits<input id="courseCredits" type="number" min=".5" max="6" step=".5" value="3" required></label><label>Grade<select id="courseGrade"><option value="">Not graded yet</option><option value="A+">A+</option><option value="A">A</option><option value="A-">A-</option><option value="B+">B+</option><option value="B">B</option><option value="B-">B-</option><option value="C+">C+</option><option value="C">C</option><option value="D">D</option><option value="F">F</option></select></label></div><div class="modal-actions"><button type="button" class="secondary-btn" data-close>Cancel</button><button class="primary-btn">Save course</button></div></form></div>
+
+<div class="modal-backdrop" id="taskModal"><form class="modal" id="taskForm"><div class="modal-head"><div><div class="eyebrow">DON'T MISS A DEADLINE</div><h2>Add task</h2></div><button type="button" class="close-btn" data-close>×</button></div><label>Task title<input id="taskTitle" required placeholder="e.g. Submit data structures lab"></label><div class="form-row"><label>Due date<input id="taskDue" type="date" required></label><label>Priority<select id="taskPriority"><option>Normal</option><option>High</option><option>Low</option></select></label></div><label>Course / category<input id="taskCourse" placeholder="e.g. CSE124-DS"></label><div class="modal-actions"><button type="button" class="secondary-btn" data-close>Cancel</button><button class="primary-btn">Add task</button></div></form></div>
+
+<div class="modal-backdrop" id="routineModal"><form class="modal" id="routineForm"><div class="modal-head"><div><div class="eyebrow">WEEKLY SCHEDULE</div><h2>Add class</h2></div><button type="button" class="close-btn" data-close>×</button></div><label>Course / class<input id="routineCourse" required placeholder="e.g. CSE113 · Programming"></label><div class="form-row"><label>Day<select id="routineDay"><option>Sunday</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option></select></label><label>Start time<input id="routineTime" type="time" required></label></div><label>Room / location<input id="routineRoom" placeholder="e.g. AB-3 / Room 402"></label><div class="modal-actions"><button type="button" class="secondary-btn" data-close>Cancel</button><button class="primary-btn">Add to routine</button></div></form></div>
+
+<div class="modal-backdrop" id="noteModal"><form class="modal" id="noteForm"><div class="modal-head"><div><div class="eyebrow">QUICK THOUGHT</div><h2 id="noteModalTitle">New note</h2></div><button type="button" class="close-btn" data-close>×</button></div><input type="hidden" id="noteId"><label>Title<input id="noteTitle" required placeholder="Give your note a title"></label><label>Note<textarea id="noteBody" rows="6" placeholder="Write something worth remembering…"></textarea></label><div class="modal-actions"><button type="button" class="secondary-btn" data-close>Cancel</button><button class="primary-btn">Save note</button></div></form></div>
+
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
